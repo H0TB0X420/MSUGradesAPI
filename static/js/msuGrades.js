@@ -67,14 +67,12 @@ Interactive.prototype.communicate = function (years, semesters) {
 
     var that = this;
 
-    var course = jQuery('#courseName').val();
-    var courseNumber = jQuery('#courseNumber').val();
+    var course = jQuery('#courseName').val().trim();
+    var courseNumber = jQuery('#courseNumber').val().trim();
     var semester = jQuery('#semesters').val();
     var year = jQuery('#years').val();  // Gather all the data from the input fields
 
     var validated = false;
-    // var link = 'https://msu-grades-api.herokuapp.com/grades/';  // The initial link
-    // var link = 'http://127.0.0.1:5000/grades/';
 
     var link = 'https://www.msugradesapi.com/grades/';
 
@@ -92,12 +90,17 @@ Interactive.prototype.communicate = function (years, semesters) {
     }
     // Rules for constructing the API call
     else if(semester === 'All'){
-        link += course +'_' + courseNumber;
-        validated = true;
+        if(year !== 'All'){
+            jQuery('#errormsg').html("You must either select both, a semester and a year, or select All for both options.").fadeIn(1000).fadeOut(6000);
+        }
+        else{
+            link += course +'_' + courseNumber;
+            validated = true;
+        }
     }
     else{
         if(year === 'All'){
-            jQuery('#errormsg').html("Incorrect combination of semester and year.").fadeIn(1000).fadeOut(1000);
+            jQuery('#errormsg').html("You must either select both, a semester and a year, or select All for both options.").fadeIn(1000).fadeOut(6000);
         }
         else {
             link += course + '_' + courseNumber + '_' + semesters.get(semester)+years.get(Number(year));
